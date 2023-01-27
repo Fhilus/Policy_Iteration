@@ -44,32 +44,6 @@ def jacobi(x, A, b, tol, max_iter=100000): #solves Ax = b using Jacobi method
     print("solving with Jacobi method")
     return x
 
-def gmres1(n, init, A, b):
-    r_0 = b - A.dot(init)
-    beta = LA.norm(r_0)
-    H = np.zeros((n, n))
-    V = np.zeros((n, n))
-    V[:, 0] = np.transpose(r_0 / beta)
-    for j in range(n):
-        w = A.dot(V[:,j])
-        for i in range(j+1):
-            H[i][j] = w.dot(V[:, i])
-            w = w - H[i][j]*(V[:, i])
-            if j+1 < n:
-                H[j+1][j] = LA.norm(w)
-                if H[j+1][j] == 0:
-                    j = n
-                else:
-                    V[:, j+1] = w/H[j+1][j]
-    y = np.linalg.lstsq(H, beta*(np.identity(n)[:, 0]), rcond=None)[0]
-    x = init + V.dot(y)
-    result = np.empty([n,1])
-    for i in range(n):
-        result[i] = x[i][i]
-
-    print("solving with own gmres")
-    return result
-
 def petsc_gmres(n, A, b):
     A_mat = PETSc.Mat().createDense(A.shape, array=A) #initialise PETSc Matrix from numpy array
     b_vec = PETSc.Vec().createSeq(n) #iniitalise PETSc vector from numpy array

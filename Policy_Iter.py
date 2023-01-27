@@ -8,6 +8,7 @@ import Policy_Iter_Solvers
 from random import seed
 from random import randint
 from numpy import linalg as LA
+from numpy import inf
 petsc4py.init(sys.argv)
 from petsc4py import PETSc
 
@@ -15,7 +16,7 @@ def get_P(muh, n):
     P = np.zeros((n, n))
     for i in range(n):
         P[i] = Probabilities[muh[i], i, :]
-
+    print(P)
     return P
 
 def get_g(muh, n):
@@ -28,7 +29,7 @@ def PolicyEvaluation(n, alpha, g, P, method):
     A = np.identity(n) - alpha*P
     J = np.zeros((n,1))
     if method == 1:
-        J = Policy_Iter_Solvers.gmres1(n, J, A, g)
+        J = Policy_Iter_Solvers.petsc_minres(n, A, g)
     if method == 2:
         print("solving with np.linalg.solve()")
         J = np.linalg.solve(A, g)
@@ -38,8 +39,6 @@ def PolicyEvaluation(n, alpha, g, P, method):
         J = Policy_Iter_Solvers.seidel(A, J, g, n, 1e-06)
     if method == 5:
         J = Policy_Iter_Solvers.jacobi(J, A, g, 1e-06)
-    if method == 6:
-        J = Policy_Iter_Solvers.petsc_minres(n, A, g)
     print("J: ", J)
     return J
 
@@ -85,10 +84,10 @@ def PolicyIteration(n, method):
 
 
 if __name__ == "__main__":
-    Probabilities, cost = Policy_Iter_Variables.setup(1) #choose model from Policy_Iter_Variables.py
-    n = Probabilities.shape[1]
+    Probabilities, cost = Policy_Iter_Variables.setup(3) #choose model from Policy_Iter_Variables.py
+    n = cost.shape[0]
     muh = np.zeros((n,1))
-    for i in range(1,6): #minres not included because it isnt fixed yet
+    for i in range(2,6): #minres not included because it isnt fixed yet
         muh_old = copy.deepcopy(muh)
         start_time = time.time()
         muh = PolicyIteration(n, i) #i is the method to be used
