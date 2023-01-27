@@ -1066,7 +1066,7 @@ def setup(m):
                         [2, 3, 1],
                         [3, 1, 2]])
     if m==3:
-        #how to get to work example Note: this example is so far only working with the petsc gmres because of it's infinity cost
+        #how to get to work example Note: States are in order [Home, Bike, Low Traffic, Medium Traffic, High Traffic, Train, Waiting Room, Work] and actions are in order: [take Bike, use Car, go to trainstation, wait, go home, drive]
         Probabilities = np.array([[[0,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1]],
                                  [[0,0,1/6,2/3,1/6,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1]],
                                  [[0,0,0,0,0,2/3,1/3,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1]],
@@ -1074,14 +1074,6 @@ def setup(m):
                                  [[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1]],
                                  [[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1],[1,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1]]])
 
-        # cost = np.array([[0, 0, 5, np.inf, np.inf, np.inf],
-        #                  [np.inf, np.inf, np.inf, np.inf, np.inf, 45],
-        #                  [np.inf, np.inf, np.inf, np.inf, np.inf, 15],
-        #                  [np.inf, np.inf, np.inf, np.inf, np.inf, 30],
-        #                  [np.inf, np.inf, np.inf, np.inf, np.inf, 70],
-        #                  [np.inf, np.inf, np.inf, np.inf, np.inf, 25],
-        #                  [np.inf, np.inf, np.inf, 3, 5, np.inf],
-        #                  [np.inf, np.inf, np.inf, np.inf, 0, np.inf]])
         cost = np.array([[0, 0, 5, 1e06, 1e06, 1e06],
                          [1e06, 1e06, 1e06, 1e06, 1e06, 45],
                          [1e06, 1e06, 1e06, 1e06, 1e06, 15],
