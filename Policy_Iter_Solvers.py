@@ -68,8 +68,8 @@ def petsc_gmres(n, A, b):
     return sol.reshape(n,1)
 
 def petsc_minres(n, A, b):
-    A_sym = np.block([[A, np.zeros((n,n))],
-                      [np.zeros((n,n)), A.transpose()]])
+    A_sym = np.block([[np.zeros((n,n)), A],
+                      [A.transpose(), np.zeros((n,n))]])
     b_big = np.block([[b],[b]])
     A_mat = PETSc.Mat().createDense(A_sym.shape, array=A_sym) #initialise PETSc Matrix from numpy array
     b_vec = PETSc.Vec().createSeq(2*n) #iniitalise PATSc vector from numpy array
@@ -91,6 +91,6 @@ def petsc_minres(n, A, b):
 
     ksp.solve(b_vec, x)
     #print(ksp.getTolerances())
-    sol = x.getArray()[:n]
+    sol = x.getArray()[n:]
 
     return sol.reshape(n,1)
