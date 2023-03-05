@@ -30,11 +30,13 @@ def PolicyEvaluation(n, alpha, g, P, method):
     J = np.zeros((n,1))
     if method == 1:
         J = Policy_Iter_Solvers.petsc_minres(n, A, g)
+        #J = Policy_Iter_Solvers.petsc_minres(n, alpha*P, g)
     if method == 2:
         print("solving with np.linalg.solve()")
         J = np.linalg.solve(A, g)
     if method == 3:
         J = Policy_Iter_Solvers.petsc_gmres(n, A, g)
+        #J = Policy_Iter_Solvers.petsc_gmres(n, alpha*P, g)
     if method == 4:
         J = Policy_Iter_Solvers.seidel(A, J, g, n, 1e-06)
     if method == 5:
@@ -62,7 +64,7 @@ def PolicyIteration(n, method):
     muh = np.zeros((n, 1), int) #initial stationary policy
     g = get_g(muh, n) #cost vector depending on stationary policy
     P = get_P(muh, n) #Probablity matrixs depending on stationary policy
-    alpha = 0.8 #discount factor
+    alpha = 0.9 #discount factor
     J_old = np.zeros((n, 1))
     J = PolicyEvaluation(n, alpha, g, P, method)
     TJ, muh = PolicyImprovement(n, muh, alpha, J)
@@ -84,10 +86,10 @@ def PolicyIteration(n, method):
 
 
 if __name__ == "__main__":
-    Probabilities, cost = Policy_Iter_Variables.setup(3) #choose model from Policy_Iter_Variables.py
+    Probabilities, cost = Policy_Iter_Variables.setup(4) #choose model from Policy_Iter_Variables.py
     n = cost.shape[0]
     muh = np.zeros((n,1))
-    for i in range(2,6): #minres not included because it isnt fixed yet
+    for i in range(1,6): #minres not included because it isnt fixed yet
         muh_old = copy.deepcopy(muh)
         start_time = time.time()
         muh = PolicyIteration(n, i) #i is the method to be used
